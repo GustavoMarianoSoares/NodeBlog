@@ -120,7 +120,12 @@ router.post('/categorias/deletar',(req, res)=>{
 })
 
 router.get('/postagens',(req, res) => { 
-    res.render('admin/postagens')
+    Postagem.find().populate('categoria').sort({data: 'desc'}).lean().then((postagens) =>{
+        res.render('admin/postagens',{postagens: postagens})
+    }).catch(err =>{
+        req.flash('error_msg','Houve um erro')
+        res.redirect('/admin')
+    })
 })
 
 router.get('/postagens/add',(req, res)=>{
