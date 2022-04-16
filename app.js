@@ -52,6 +52,19 @@
       })
     })
 
+    app.get('/postagem/:slug',(req, res)=>{
+      Postagem.findOne({slug: req.params.slug}).lean().then((postagem) => {
+        if(postagem){
+          res.render('postagem/index',{postagem: postagem})
+        }else{
+          req.flash('error_msg','Está postagem não existe')
+        }
+      }).catch(err => {
+        req.flash('error_msg','Houve um erro')
+        res.redirect('/')
+      })
+    })
+
     app.get('/404',(req, res) => {
       res.send('Erro 404')
     })
